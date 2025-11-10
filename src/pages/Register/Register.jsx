@@ -1,10 +1,16 @@
 // RegisterPage.jsx
-import React, { useState } from 'react';
+import React, {  useContext, useState } from 'react';
 import { Link } from 'react-router';
 import { IoEyeOff, IoEye } from 'react-icons/io5';
 import { FcGoogle } from 'react-icons/fc';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const RegisterPage = () => {
+
+  const {signInWithGoogle} = useContext(AuthContext)
+
+
+
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
 
@@ -37,9 +43,13 @@ const RegisterPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    console.log('Attempting Google registration/login');
-    alert('Google Login attempted!');
-    // আপনার Google রেজিস্ট্রেশন/লগইন লজিক এখানে লিখুন
+    signInWithGoogle()
+    .then( result => {
+       console.log(result.user)
+    })
+    .catch(error => {
+      console.log(error)
+    })
   };
 
   return (

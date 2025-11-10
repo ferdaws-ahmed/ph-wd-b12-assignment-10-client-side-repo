@@ -4,6 +4,10 @@ import Home from "../components/Home/Home";
 import ErrorPage from "../components/ErrorPage/ErrorPage";
 import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
+import ProtectedRoute from "./protectedRoutes";
+import AddHabit from "../components/AddHabit/AddHabit";
+import MyHabit from "../components/MyHabit/MyHabit";
+import PublicHabit from "../components/PublicHabit/PublicHabit";
 
 
 
@@ -24,6 +28,27 @@ const router = createBrowserRouter([
             {
                 path:'/login',
                 Component: Login
+            },
+            
+            {
+                path:'/addHabit',
+                 Component: () => (
+                <ProtectedRoute>
+                    <AddHabit />
+                </ProtectedRoute>
+                )
+            },
+            {
+                path: '/myHabits',
+                 Component: () => (
+                <ProtectedRoute>
+                    <MyHabit />
+                </ProtectedRoute>
+                 )
+            },
+            {
+                path: '/browsePublicHabits',
+                Component: PublicHabit
             }
         ]
     },
