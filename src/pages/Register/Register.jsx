@@ -42,11 +42,11 @@ const Register = () => {
       .then((result) => {
         const firebaseUser = result.user;
 
-        // Update profile with name & photoURL
+        
         updateProfile(firebaseUser, { displayName: name, photoURL })
           .then(() => {
             firebaseUser.reload().then(() => {
-              // Send user to backend
+              
               fetch("http://localhost:3000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -62,7 +62,7 @@ const Register = () => {
                 .then(() => {
                   toast.success("Account created successfully!");
                   form.reset();
-                  navigate("/"); // redirect home
+                  navigate("/");
                 });
             });
           })
@@ -127,7 +127,7 @@ const Register = () => {
                   Full Name
                 </span>
               </label>
-              <input type="text" name="name" className="input input-bordered w-full text-base dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="John Doe" required />
+              <input type="text" name="name" className="input input-bordered w-full text-base dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Your Name" required />
             </div>
 
             {/* Email */}

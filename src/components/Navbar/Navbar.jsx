@@ -104,7 +104,7 @@ const Navbar = () => {
             <img
               onClick={() => setUserMenuOpen(!userMenuOpen)}
               src={
-                // ✅ Priority: Auth user photoURL -> reloadUserInfo -> default image
+                
                 user.photoURL || user.reloadUserInfo?.photoUrl || "https://i.ibb.co/placeholder.png"
               }
               alt={user.displayName || "User"}

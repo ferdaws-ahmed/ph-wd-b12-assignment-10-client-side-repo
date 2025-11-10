@@ -1,37 +1,66 @@
-// LoginPage.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router'; 
-import { IoEyeOff, IoEye } from 'react-icons/io5'; 
+
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { IoEyeOff, IoEye } from 'react-icons/io5';
 import { FcGoogle } from 'react-icons/fc';
+import { AuthContext } from '../../contexts/AuthContext';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
+  const { signInUser, signInWithGoogle } = useContext(AuthContext);
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log('Login attempt:', { email, password });
-    alert('Login attempted!');
-    // আপনার আসল লগইন লজিক এখানে লিখুন
+
+    signInUser(email, password)
+      .then((result) => {
+        toast.success(' Login successful!');
+        form.reset();
+        navigate('/'); 
+      })
+      .catch((error) => {
+        console.error(error);
+      
+        let message = "⚠️ Invalid email or password!";
+        if (error.code === "auth/user-not-found") {
+          message = "❌ User not found!";
+        } else if (error.code === "auth/wrong-password") {
+          message = "❌ Wrong password!";
+        } 
+        toast.error(message, {
+          position: "top-center",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
   };
 
   const handleGoogleLogin = () => {
-    console.log('Attempting Google login');
-    alert('Google Login attempted!');
-    // আপনার Google লগইন লজিক এখানে লিখুন
+    signInWithGoogle()
+      .then((result) => {
+        toast.success(' Logged in with Google!');
+        navigate('/'); 
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("❌ Google login failed!");
+      });
   };
 
   return (
-    
     <div className='flex justify-center items-center min-h-screen 
                     bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 
                     dark:from-gray-900 dark:via-blue-900 dark:to-purple-900
-                    text-gray-900 dark:text-white
-                    // Animation classes can be uncommented if configured in tailwind.config.js
-                    // animate-gradient-background bg-[length:200%_200%]
-                    p-4 sm:p-6'>
+                    text-gray-900 dark:text-white p-4 sm:p-6'>
 
       <div className="card bg-base-100 dark:bg-gray-800 w-full max-w-sm shrink-0 shadow-2xl 
                       rounded-2xl border border-gray-200 dark:border-gray-700
@@ -79,18 +108,20 @@ const LoginPage = () => {
               </span>
             </div>
 
-            {/* Forget Password Link */}
+            {/* Forget Password */}
             <div className='text-right'> 
-              <Link 
-                to="/forgetpassword" 
+              <button
+                type="button"
+                onClick={() => toast.info("🔔 Forget password triggered!")}
                 className="link link-hover text-sm font-medium text-blue-500 dark:text-blue-400 hover:underline"
               >
                 Forgot password?
-              </Link>
+              </button>
             </div>
 
             {/* Login Button */}
             <button 
+              type="submit"
               className="btn btn-primary w-full mt-4 text-lg font-bold
                          transform transition-transform duration-200 hover:scale-[1.01] 
                          shadow-md shadow-blue-500/30"
@@ -98,7 +129,7 @@ const LoginPage = () => {
               Login
             </button>
 
-           
+            {/* Divider */}
             <div className='flex justify-center items-center gap-3 py-2'> 
               <div className='h-px flex-grow bg-gray-300 dark:bg-gray-600'></div> 
               <span className='text-gray-500 dark:text-gray-400'>or</span>
