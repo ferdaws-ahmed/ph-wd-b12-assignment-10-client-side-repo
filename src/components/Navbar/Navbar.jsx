@@ -101,7 +101,8 @@ const Navbar = () => {
       <div className="navbar-end relative">
         {user ? (
           <div className="relative">
-            <img
+            <img 
+              referrerPolicy="no-referrer"
               onClick={() => setUserMenuOpen(!userMenuOpen)}
               src={
                 

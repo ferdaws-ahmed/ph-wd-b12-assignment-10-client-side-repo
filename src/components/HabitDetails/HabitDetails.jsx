@@ -1,102 +1,175 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const HabitDetails = () => {
   const { id } = useParams();
+  const { user } = useContext(AuthContext);
   const [habit, setHabit] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [todayCompleted, setTodayCompleted] = useState(false);
+  const [currentStreak, setCurrentStreak] = useState(0);
+
+  //Calculate streak based on completionHistory
+  const calculateStreak = (history) => {
+    if (!history || !history.length) return 0;
+
+    const dates = history.map((entry) => entry.date).sort((a, b) => new Date(b) - new Date(a));
+    let streak = 0;
+    let today = new Date();
+
+    for (let i = 0; i < dates.length; i++) {
+      const date = new Date(dates[i]);
+      const diff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+      if (diff <= streak) streak++;
+      else break;
+      today.setDate(today.getDate() - 1);
+    }
+
+    return streak;
+  };
+
+  const getStreakIcon = (streak) => {
+    if (streak >= 30) return "🏆";
+    if (streak >= 15) return "🎯";
+    if (streak >= 10) return "🔥";
+    if (streak >= 5) return "💪";
+    if (streak >= 3) return "✨";
+    if (streak >= 2) return "👍";
+    if (streak >= 1) return "😊";
+    return "😐";
+  };
 
   useEffect(() => {
-    fetch(`http://localhost:3000/publicHabits/${id}`) 
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchHabit = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/publicHabits/${id}`);
+        const data = await res.json();
         setHabit(data);
+
+        const today = new Date().toISOString().split("T")[0];
+        const history = data.completionHistory || [];
+        setTodayCompleted(history.some((entry) => entry.date === today));
+        setCurrentStreak(calculateStreak(history));
+
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching habit details:", err);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load habit details");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchHabit();
   }, [id]);
 
-  if (loading) {
+  const handleMarkComplete = async () => {
+    if (!habit) return;
+
+    const today = new Date().toISOString().split("T")[0];
+    if (habit.completionHistory?.some((entry) => entry.date === today)) {
+      toast.error("Already marked today!");
+      return;
+    }
+
+    try {
+      const newEntry = { userEmail: user.email, date: today };
+      const updatedHistory = [...(habit.completionHistory || []), newEntry];
+
+      // PATCH request to backend
+      const res = await fetch(`http://localhost:3000/publicHabits/${habit._id}/markComplete`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completionHistory: updatedHistory }),
+      });
+      const data = await res.json();
+
+      toast.success("Marked as complete!");
+      setHabit((prev) => ({ ...prev, completionHistory: data.completionHistory }));
+      setTodayCompleted(true);
+      setCurrentStreak(calculateStreak(data.completionHistory));
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to mark complete!");
+    }
+  };
+
+  if (loading)
     return (
-      <div className="flex justify-center items-center min-h-[80vh] bg-gray-50">
-        <div className="relative flex items-center justify-center">
-          <div className="w-16 h-16 border-4 border-blue-300 rounded-full animate-spin border-t-transparent"></div>
-          <span className="absolute text-blue-600 font-semibold text-sm">
-            Loading...
-          </span>
-        </div>
+      <div className="flex justify-center items-center h-[80vh]">
+        <span className="loading loading-spinner text-indigo-600 w-12 h-12"></span>
       </div>
     );
-  }
 
-  if (!habit || habit.message === "Habit not found") {
+  if (!habit)
     return (
-      <div className="flex justify-center items-center min-h-[80vh]">
-        <p className="text-gray-500 text-lg font-medium">No data found</p>
-      </div>
+      <div className="text-center text-gray-500 py-20">Habit not found.</div>
     );
-  }
 
-  // Fake progress data for demo
-  const progress = habit.completedDays ? (habit.completedDays / 30) * 100 : 0;
+  const progressPercent = Math.floor(((habit.completionHistory?.length || 0) / 30) * 100);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10 mb-16">
-      <img
-        src={habit.image}
-        alt={habit.title}
-        className="w-full h-64 object-cover rounded-xl mb-6"
-      />
-
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">{habit.title}</h1>
-      <p className="text-gray-600 mb-4">{habit.description}</p>
-
-      <div className="flex items-center gap-3 mb-6">
-        <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
-          {habit.category}
-        </span>
-        {habit.streak && (
-          <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-            🔥 {habit.streak}-day streak
-          </span>
-        )}
-      </div>
-
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <label className="text-sm font-semibold text-gray-700">
-          Progress (Last 30 Days)
-        </label>
-        <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
-          <div
-            className="bg-blue-500 h-3 rounded-full transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-        <p className="text-xs text-gray-500 mt-1">
-          {Math.round(progress)}% completed
-        </p>
-      </div>
-
-      {/* Creator Info */}
-      {habit.creator && (
-        <div className="border-t border-gray-200 pt-4">
-          <h3 className="text-gray-700 font-semibold mb-1">Created by:</h3>
-          <p className="text-gray-600 text-sm">
-            {habit.creator.name} ({habit.creator.email})
-          </p>
-        </div>
+    <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-6 mt-10 border border-gray-200">
+      {habit.imageURL && (
+        <img
+          src={habit.imageURL}
+          alt={habit.habitName}
+          className="w-full h-56 object-cover rounded-lg mb-6 border"
+        />
       )}
 
-      {/* Mark Complete Button */}
-      <div className="mt-6">
-        <button className="px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition-all">
-          Mark Complete
-        </button>
+      <h1 className="text-3xl font-bold text-indigo-600 mb-2">{habit.habitName}</h1>
+      <p className="text-gray-600 mb-4">
+        Category: <span className="font-medium">{habit.category || "General"}</span>
+      </p>
+
+      <p className="text-gray-500 mb-4">
+        Creator: <span className="font-medium">{habit.creatorName || "Unknown"}</span> | Created:{" "}
+        <span className="font-medium">
+          {habit.createDate ? new Date(habit.createDate).toLocaleDateString() : "Unknown"}
+        </span>
+      </p>
+
+      <p className="text-gray-700 mb-6">
+        {habit.longDescription || habit.shortDescription || "No description available."}
+      </p>
+
+      <div className="mb-4">
+        <div className="flex justify-between mb-1 text-gray-700">
+          <span>Progress</span>
+          <span>{progressPercent}%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-4">
+          <div
+            className="bg-indigo-500 h-4 rounded-full transition-all duration-500"
+            style={{ width: `${progressPercent}%` }}
+          ></div>
+        </div>
       </div>
+
+      <div className="mb-4 flex items-center gap-2">
+        <span className="inline-block bg-red-500 text-white px-3 py-1 rounded-full font-semibold">
+          {getStreakIcon(currentStreak)} Current Streak: {currentStreak} day{currentStreak > 1 ? "s" : ""}
+        </span>
+      </div>
+
+      <p className="text-gray-700 mb-6">
+        Completed Last 30 Days: {habit.completionHistory?.length || 0}
+      </p>
+
+      <button
+        onClick={handleMarkComplete}
+        disabled={todayCompleted}
+        className={`px-6 py-2 rounded-lg font-semibold transition duration-300 ${
+          !todayCompleted
+            ? "bg-indigo-600 text-white hover:bg-indigo-700"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
+      >
+        {todayCompleted ? "Completed Today" : "Mark Complete"}
+      </button>
     </div>
   );
 };

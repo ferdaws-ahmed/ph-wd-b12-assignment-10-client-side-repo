@@ -5,13 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router";
 
 const MyHabits = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading: authLoading } = useContext(AuthContext); // get global auth loading
   const [habits, setHabits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     if (!user?.email) return;
+
+    setLoading(true); // local loader for fetching habits
     fetch(`http://localhost:3000/myhabit?userEmail=${user.email}`)
       .then((res) => res.json())
       .then((data) => {
@@ -40,15 +42,44 @@ const MyHabits = () => {
       });
   };
 
+  // 🔹 Custom Loader
+  const Loader = () => (
+    <div className="flex flex-col items-center justify-center min-h-[70vh]">
+      <motion.div
+        className="relative w-24 h-24 flex items-center justify-center"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+      >
+        <motion.div
+          className="absolute rounded-full border-t-4 border-b-4 border-indigo-500 w-24 h-24"
+          animate={{ rotate: -360 }}
+          transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+        ></motion.div>
+        <motion.div
+          className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-full shadow-lg"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.8, 1, 0.8],
+          }}
+          transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+        ></motion.div>
+      </motion.div>
+      <p className="mt-6 text-gray-600 font-semibold text-lg tracking-wide animate-pulse">
+        Loading your habits...
+      </p>
+    </div>
+  );
+
+  // 🔹 Show loader if either auth is loading or fetching habits
+  if (authLoading || loading) return <Loader />;
+
   return (
     <div className="min-h-[80vh] py-10 px-5 bg-white">
       <h2 className="text-3xl font-bold text-center mb-8 text-indigo-600">
         📝 My Habits
       </h2>
 
-      {loading ? (
-        <p className="text-center text-gray-500">Loading habits...</p>
-      ) : habits.length === 0 ? (
+      {habits.length === 0 ? (
         <p className="text-center text-gray-500">You have no habits yet.</p>
       ) : (
         <>

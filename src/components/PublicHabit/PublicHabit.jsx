@@ -148,7 +148,7 @@ const PublicHabits = () => {
                     </div>
                   </div>
 
-                  <Link to={`/habitDetails/${habit._id}`}>
+                  <Link to={`/habit-details/${habit._id}`}>
                     <button className="mt-5 py-2 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-semibold hover:scale-[1.03] transition-transform duration-200">
                       View More
                     </button>

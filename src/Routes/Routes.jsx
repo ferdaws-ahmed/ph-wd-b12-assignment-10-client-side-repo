@@ -54,7 +54,7 @@ const router = createBrowserRouter([
                 Component: PublicHabit
             },
             {
-            path: "/habitDetails/:id",
+            path: "/habit-details/:id",
             element: (
                 <ProtectedRoute>
                 <HabitDetails />

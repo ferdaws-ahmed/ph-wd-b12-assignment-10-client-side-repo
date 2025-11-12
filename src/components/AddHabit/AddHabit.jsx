@@ -1,4 +1,3 @@
-// AddHabit.jsx
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
@@ -29,6 +28,7 @@ const AddHabit = () => {
 
     try {
       setLoading(true);
+      //Insert into myhabit collection
       const res = await fetch("http://localhost:3000/myhabit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -39,6 +39,21 @@ const AddHabit = () => {
 
       if (data.insertedId) {
         toast.success("Habit added successfully!");
+
+        //  Insert into public-habits collection
+        try {
+          await fetch("http://localhost:3000/publicHabits", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(habitData),
+          });
+        } catch (err) {
+          console.error("Failed to add habit to public-habits:", err);
+          toast.warning(
+            "Habit added to your collection, but failed to add to public habits"
+          );
+        }
+
         form.reset();
       } else {
         toast.error("Failed to add habit. Try again!");

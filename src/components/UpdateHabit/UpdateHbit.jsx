@@ -8,7 +8,6 @@ const UpdateHabit = () => {
   const [habit, setHabit] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch existing habit by ID
   useEffect(() => {
     fetch(`http://localhost:3000/myhabit/${id}`)
       .then((res) => res.json())
@@ -23,16 +22,15 @@ const UpdateHabit = () => {
       });
   }, [id]);
 
-  // Update habit in DB
   const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
     const updatedHabit = {
       habitName: form.habitName.value,
-      description: form.description.value,
+      shortDescription: form.description.value,
       category: form.category.value,
       reminderTime: form.reminderTime.value,
-      image: form.image.value,
+      imageURL: form.image.value,
     };
 
     fetch(`http://localhost:3000/myhabit/${id}`, {
@@ -41,8 +39,9 @@ const UpdateHabit = () => {
       body: JSON.stringify(updatedHabit),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         toast.success("Habit updated successfully!");
+        form.reset();
         setTimeout(() => navigate("/myhabits"), 1000);
       })
       .catch((err) => {
@@ -72,7 +71,6 @@ const UpdateHabit = () => {
       </h2>
 
       <form onSubmit={handleUpdate} className="space-y-5">
-        {/* Habit Title */}
         <div>
           <label className="block font-semibold mb-1">Habit Title</label>
           <input
@@ -84,19 +82,16 @@ const UpdateHabit = () => {
           />
         </div>
 
-        {/* Description */}
         <div>
           <label className="block font-semibold mb-1">Description</label>
           <textarea
             name="description"
-            defaultValue={habit.description}
+            defaultValue={habit.shortDescription || ""}
             rows="3"
-            required
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400"
           ></textarea>
         </div>
 
-        {/* Category */}
         <div>
           <label className="block font-semibold mb-1">Category</label>
           <input
@@ -108,37 +103,32 @@ const UpdateHabit = () => {
           />
         </div>
 
-        {/* Reminder Time */}
         <div>
           <label className="block font-semibold mb-1">Reminder Time</label>
           <input
             type="time"
             name="reminderTime"
-            defaultValue={habit.reminderTime}
+            defaultValue={habit.reminderTime || ""}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400"
           />
         </div>
 
-        {/* Image URL */}
         <div>
-          <label className="block font-semibold mb-1">
-            Image URL (optional)
-          </label>
+          <label className="block font-semibold mb-1">Image URL (optional)</label>
           <input
             type="text"
             name="image"
-            defaultValue={habit.image || ""}
+            defaultValue={habit.imageURL || ""}
             className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-400"
           />
         </div>
 
-        {/* User Info (Read Only) */}
         <div className="grid md:grid-cols-2 gap-5">
           <div>
             <label className="block font-semibold mb-1">User Name</label>
             <input
               type="text"
-              value={habit.userName}
+              value={habit.creatorName || "Unknown"}
               readOnly
               className="w-full border bg-gray-100 rounded-lg px-4 py-2"
             />
@@ -154,7 +144,6 @@ const UpdateHabit = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
         <div className="text-center">
           <button
             type="submit"
