@@ -8,6 +8,9 @@ import ProtectedRoute from "./protectedRoutes";
 import AddHabit from "../components/AddHabit/AddHabit";
 import MyHabit from "../components/MyHabit/MyHabit";
 import PublicHabit from "../components/PublicHabit/PublicHabit";
+import HabitDetails from "../components/HabitDetails/HabitDetails";
+import UpdateHabit from "../components/UpdateHabit/UpdateHbit";
+
 
 
 
@@ -49,6 +52,22 @@ const router = createBrowserRouter([
             {
                 path: '/browsePublicHabits',
                 Component: PublicHabit
+            },
+            {
+            path: "/habitDetails/:id",
+            element: (
+                <ProtectedRoute>
+                <HabitDetails />
+                </ProtectedRoute>
+            ),
+            },
+            {
+                path: "/updatehabit/:id",
+                 Component: () => (
+                <ProtectedRoute>
+                    <UpdateHabit></UpdateHabit>
+                </ProtectedRoute>
+                 )
             }
         ]
     },
