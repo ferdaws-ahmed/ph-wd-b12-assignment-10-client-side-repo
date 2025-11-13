@@ -27,10 +27,10 @@ const Footer = () => {
 
         {/* Links */}
         <div className="flex flex-col gap-2 text-sm">
-          <Link to="/terms" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+          <Link to="/termsAndCondition" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
             Terms & Conditions
           </Link>
-          <Link to="/privacy" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+          <Link to="/privacyPolicy" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
             Privacy Policy
           </Link>
         </div>

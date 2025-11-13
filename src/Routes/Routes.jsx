@@ -10,6 +10,9 @@ import MyHabit from "../components/MyHabit/MyHabit";
 import PublicHabit from "../components/PublicHabit/PublicHabit";
 import HabitDetails from "../components/HabitDetails/HabitDetails";
 import UpdateHabit from "../components/UpdateHabit/UpdateHbit";
+import TermsAndConditions from "../components/TermsCondition/TermsAndCondition";
+import PrivacyPolicy from "../components/PrivacyPolicy/PrivacyPolicy";
+
 
 
 
@@ -68,6 +71,14 @@ const router = createBrowserRouter([
                     <UpdateHabit></UpdateHabit>
                 </ProtectedRoute>
                  )
+            },
+            {
+                path: "/termsAndCondition",
+                Component: TermsAndConditions
+            },
+            {
+                path:"/privacyPolicy",
+                Component: PrivacyPolicy
             }
         ]
     },
