@@ -55,7 +55,7 @@ const FeaturedHabits = () => {
 
                 {/* Button at the very bottom */}
                 <div className="mt-auto">
-                  <Link  to={`/habitDetails/${habit._id}`}>
+                  <Link  to={`/habit-details/${habit._id}`}>
                   <button className="w-full py-2 font-semibold rounded-xl text-white bg-gradient-to-r from-indigo-600 to-pink-500 hover:scale-[1.03] active:scale-[0.98] transition-transform duration-200">
                     View Details
                   </button>

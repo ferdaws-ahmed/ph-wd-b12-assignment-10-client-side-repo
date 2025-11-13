@@ -4,6 +4,7 @@ import FeaturedHabits from '../featuresHabits/FeaturesHabits';
 import BenefitsSection from '../BenefitsSection/BenefitsSection';
 import TrackProgressSection from '../ExtraSection1/ExtraSection1';
 import CommunitySection from '../ExtraSection2/ExtraSection2';
+import MotionSection from '../ExtraSection2/ExtraSection2';
 
 const Home = () => {
     return (
@@ -12,7 +13,7 @@ const Home = () => {
             <FeaturedHabits></FeaturedHabits>
             <BenefitsSection></BenefitsSection>
             <TrackProgressSection></TrackProgressSection>
-            <CommunitySection></CommunitySection>
+            <MotionSection></MotionSection>
         </div>
     );
 };

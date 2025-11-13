@@ -24,7 +24,7 @@ const PublicHabits = () => {
       });
   }, []);
 
-  // 🔍 Dynamic Search + Filter
+  //  Dynamic Search + Filter
   useEffect(() => {
     let results = habits;
 
@@ -44,7 +44,12 @@ const PublicHabits = () => {
     setFilteredHabits(results);
   }, [search, category, habits]);
 
-  // 🌀 Custom Loader
+
+
+
+  
+
+  //  Custom Loader
   const Loader = () => (
     <div className="flex flex-col items-center justify-center min-h-[70vh]">
       <motion.div
@@ -76,13 +81,13 @@ const PublicHabits = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-100 via-gray-50 to-white dark:from-[#3d84dc] dark:via-[#58e28f] dark:to-[#cae640]">
-      {/* 🔹 Main Content (takes available space) */}
+      {/*  Main Content (takes available space) */}
       <div className="flex-grow py-14 px-5">
         <h2 className="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-red-600">
           Browse Public Habits
         </h2>
 
-        {/* 🔎 Search & Filter */}
+        {/*  Search & Filter */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 max-w-5xl mx-auto mb-10">
           <input
             type="text"
@@ -106,7 +111,7 @@ const PublicHabits = () => {
           </select>
         </div>
 
-        {/* 🧩 Habits Grid */}
+        {/*  Habits Grid */}
         {filteredHabits.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredHabits.map((habit) => (
