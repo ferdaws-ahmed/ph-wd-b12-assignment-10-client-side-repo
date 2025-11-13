@@ -4,31 +4,63 @@ import { motion } from "framer-motion";
 
 const MotionSection = () => {
   return (
-    <section className="bg-white py-16 px-5">
+    <section className="bg-gradient-to-r from-purple-100 via-purple-50 to-purple-100 py-20 px-5">
       <div className="max-w-4xl mx-auto text-center">
         <motion.h2
-          className="text-3xl font-bold text-purple-600 mb-4"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          className="text-4xl font-bold text-purple-700 mb-6"
+          initial={{ opacity: 0, y: -60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
         >
-          Build Your Best Habits
+          Level Up Your Daily Habits
         </motion.h2>
+
         <motion.p
-          className="text-gray-700 mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          className="text-gray-700 mb-10 text-lg"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
         >
-          Habituo empowers you to create lasting habits with a simple, intuitive interface.
-          Keep track of your progress and celebrate every achievement.
+          Habituo makes habit tracking easy and fun. Set goals, mark your progress, and 
+          celebrate every streak. Consistency is the key to success!
         </motion.p>
+
         <motion.div
-          className="inline-block px-6 py-3 bg-purple-500 text-white rounded-lg cursor-pointer hover:bg-purple-600"
-          whileHover={{ scale: 1.1 }}
+          className="inline-block px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg cursor-pointer shadow-lg hover:bg-purple-700"
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          Start Tracking
+          Get Started
+        </motion.div>
+
+        <motion.div
+          className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-6"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
+          <motion.div
+            className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition cursor-default"
+            whileHover={{ y: -5 }}
+          >
+            <h3 className="text-xl font-bold mb-2 text-purple-700">Track Progress</h3>
+            <p className="text-gray-600 text-sm">
+              Keep daily tabs on your habits and visualize your streaks.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition cursor-default"
+            whileHover={{ y: -5 }}
+          >
+            <h3 className="text-xl font-bold mb-2 text-purple-700">Stay Motivated</h3>
+            <p className="text-gray-600 text-sm">
+              Celebrate achievements and receive visual feedback on your consistency.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>

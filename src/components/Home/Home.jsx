@@ -12,8 +12,9 @@ const Home = () => {
             <HomeBanner></HomeBanner>
             <FeaturedHabits></FeaturedHabits>
             <BenefitsSection></BenefitsSection>
+             <MotionSection></MotionSection>
             <TrackProgressSection></TrackProgressSection>
-            <MotionSection></MotionSection>
+           
         </div>
     );
 };
