@@ -132,7 +132,7 @@ const Navbar = () => {
         ) : (
           <Link
             to="/login"
-            className="btn btn-outline btn-primary flex items-center gap-2"
+            className="btn btn-outline btn-primary flex items-center gap-2 hover:bg-gradient-to-r hover:from-indigo-600 hover:to-pink-500"
           >
             <FaUserCircle className="text-lg" />
             Login

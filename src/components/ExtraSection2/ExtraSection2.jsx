@@ -1,10 +1,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
+
 
 const MotionSection = () => {
+  const navigate = useNavigate();
   return (
-    <section className="bg-gradient-to-r from-purple-100 via-purple-50 to-purple-100 py-20 px-5">
+    <section className="bg-gradient-to-r from-purple-100 via-purple-50 to-purple-100 py-20 px-5 mt-10 border rounded-2xl">
       <div className="max-w-4xl mx-auto text-center">
         <motion.h2
           className="text-4xl font-bold text-purple-700 mb-6"
@@ -28,7 +31,8 @@ const MotionSection = () => {
         </motion.p>
 
         <motion.div
-          className="inline-block px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg cursor-pointer shadow-lg hover:bg-purple-700"
+            onClick={() => navigate("/login")}
+           className="w-[20%] mx-auto py-2 font-semibold rounded-xl text-white bg-gradient-to-r from-indigo-600 to-pink-500 hover:scale-[1.03] active:scale-[0.98] transition-transform duration-200"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
