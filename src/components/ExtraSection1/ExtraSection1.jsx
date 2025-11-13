@@ -1,29 +1,58 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { FaChartLine } from "react-icons/fa";
 
-const TrackProgressSection = () => {
+import React from "react";
+import Marquee from "react-fast-marquee";
+import { BoltIcon, HeartIcon, FireIcon, CalendarDaysIcon } from "@heroicons/react/24/solid";
+
+const cardData = [
+  {
+    id: 1,
+    title: "Build Daily Habits",
+    description: "Track your daily habits and stay consistent with your goals.",
+    icon: <CalendarDaysIcon className="w-10 h-10 text-indigo-400" />,
+  },
+  {
+    id: 2,
+    title: "Stay Motivated",
+    description: "Get reminders and notifications to keep your habit streak alive.",
+    icon: <BoltIcon className="w-10 h-10 text-yellow-400" />,
+  },
+  {
+    id: 3,
+    title: "Improve Yourself",
+    description: "Small daily actions lead to big improvements over time.",
+    icon: <FireIcon className="w-10 h-10 text-orange-400" />,
+  },
+  {
+    id: 4,
+    title: "Loved by Users",
+    description: "Join thousands of users improving their life one habit at a time.",
+    icon: <HeartIcon className="w-10 h-10 text-red-400" />,
+  },
+];
+
+const ExtraSection1 = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="py-16 px-5 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 dark:from-[#1f4068] dark:via-[#162447] dark:to-[#1a1a2e]"
-    >
-      <div className="max-w-6xl mx-auto text-center">
-        <FaChartLine size={48} className="mx-auto text-indigo-600 mb-6" />
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-4 text-gray-800 dark:text-gray-200">
-          Track Your Progress
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm md:text-base">
-          Keep an eye on your daily habits and measure your growth. Visualize your achievements and stay motivated to build better routines.
-        </p>
-        <button className="mt-6 px-6 py-2 rounded-xl font-semibold bg-gradient-to-r from-indigo-600 to-pink-500 text-white hover:scale-[1.03] active:scale-[0.98] transition-transform duration-200">
-          Start Tracking
-        </button>
-      </div>
-    </motion.div>
+    <section className="bg-gray-900 py-12">
+      <h2 className="text-3xl font-bold text-center mb-10 text-white">
+        🚀 Why Choose Habituo?
+      </h2>
+
+      <Marquee speed={60} gradient={false} pauseOnHover={true}>
+        <div className="flex space-x-6 px-4">
+          {cardData.map((card) => (
+            <div
+              key={card.id}
+              className="bg-gray-800 text-white shadow-lg rounded-xl p-6 flex flex-col items-center justify-center min-w-[220px] hover:scale-105 transform transition"
+            >
+              {card.icon}
+              <h3 className="mt-4 font-semibold text-lg text-center">{card.title}</h3>
+              <p className="mt-2 text-sm text-gray-300 text-center">{card.description}</p>
+            </div>
+          ))}
+        </div>
+      </Marquee>
+    </section>
   );
 };
 
-export default TrackProgressSection;
+export default ExtraSection1;
