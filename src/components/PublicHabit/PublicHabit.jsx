@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
+import { Link } from "react-router"; // <- updated import
 
 const PublicHabits = () => {
   const [habits, setHabits] = useState([]);
@@ -24,12 +24,15 @@ const PublicHabits = () => {
       });
   }, []);
 
-  //  Dynamic Search + Filter
+  // Dynamic Search + Filter
   useEffect(() => {
     let results = habits;
 
     if (category !== "All") {
-      results = results.filter((habit) => habit.category === category);
+      results = results.filter(
+        (habit) =>
+          habit.category?.toLowerCase() === category.toLowerCase()
+      );
     }
 
     if (search.trim() !== "") {
